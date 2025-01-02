@@ -14,7 +14,7 @@ span.css-17lntkn.eczjsme5 {
     color: #000000;
 }
 
-div[data-testid="stMain"] {
+section[data-testid="stMain"] {
     background-color: #00205B;
     color: #FFFFFF;
 }
