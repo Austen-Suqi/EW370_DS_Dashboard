@@ -12,9 +12,8 @@ st.write('When we are first building a model we only have a set amount of data. 
 
 st.write('Below you\'ll see the first five data points and their labels where zero through 2 represent Setosa, Versicolour, and Virginica respectively. You might wonder why we have a numerical label in addition to the name. That\'s because most models work better with numbers than words.')
 # read df.head from './pages/KNN_images/df_head.txt'
-with open('./pages/KNN_images/df_head.txt') as f:
-    df = pd.read_csv(f)
-st.dataframe(df.head())
+df = pd.read_csv('./pages/KNN_images/df_head.csv')
+st.write(df.head())
 
 # Train a KNN model
 st.header('Let\'s train a KNN model!')
