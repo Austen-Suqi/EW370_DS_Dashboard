@@ -12,8 +12,13 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import streamlit as st
 from matplotlib.lines import Line2D
 
-with open('./pages/style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+@st.cache_resource
+def load_format(file_path):
+    with open(file_path) as f:
+        return f.read()
+
+f = load_format('./pages/style.css')
+st.markdown(f'<style>{f}</style>',unsafe_allow_html=True)
 
 # Title for streamlit page
 st.title('K-Means Clustering Algorithm')

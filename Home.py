@@ -1,7 +1,12 @@
 import streamlit as st
 
-with open('./pages/style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+@st.cache_resource
+def load_format(file_path):
+    with open(file_path) as f:
+        return f.read()
+
+f = load_format('./pages/style.css')
+st.markdown(f'<style>{f}</style>',unsafe_allow_html=True)
 
 st.image("./pages/WRC3.png")
 st.title("Welcoome to the EW370 Data Science Dashboard!")
