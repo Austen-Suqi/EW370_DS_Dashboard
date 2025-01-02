@@ -14,7 +14,7 @@ st.write('Below you\'ll see the first five data points and their labels where ze
 # read df.head from './pages/KNN_images/df_head.txt'
 with open('./pages/KNN_images/df_head.txt') as f:
     df = pd.read_csv(f)
-st.write(df.head())
+st.dataframe(df.head())
 
 # Train a KNN model
 st.header('Let\'s train a KNN model!')
@@ -22,7 +22,6 @@ st.header('Let\'s train a KNN model!')
 n = st.slider('Select a value for n',1,105,1)
 
 df_accuracies = pd.read_csv('./pages/knn_results.csv')
-results_accuracy = df_accuracies.iloc[n-1]
-st.write(str(float(results_accuracy*100))[:5]+'% accuracy')
+st.write(str(float(df_accuracies.iloc[n-1]*100))[:5]+'% accuracy')
 st.image(f'./pages/KNN_images/knn_cm_{n}.png')
 st.write('Figure 1: Confusion matrix for KNN model with n='+str(n))
