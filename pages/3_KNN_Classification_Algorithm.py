@@ -1,36 +1,47 @@
-# Importing the required libraries
 import pandas as pd
 import streamlit as st
+from pathlib import Path
 
+# 1. Setup Paths
+ROOT_DIR = Path(__file__).parent.parent
+DATA_DIR = ROOT_DIR / "pages"
+KNN_IMG_DIR = ROOT_DIR / "pages" / "KNN_images"
+
+# 2. Smart Data Loading
 @st.cache_data
-def load_data(file_path):
-    return pd.read_csv(file_path)
+def load_data(file_name):
+    path = DATA_DIR / file_name
+    if path.exists():
+        return pd.read_csv(path)
+    return None
 
-df = load_data('./pages/KNN_images/df_head.csv')
-df_accuracies = load_data('./pages/knn_results.csv')
-
-@st.cache_resource
-def load_format(file_path):
-    with open(file_path) as f:
-        return f.read()
-
-f = load_format('./pages/style.css')
-st.markdown(f'<style>{f}</style>',unsafe_allow_html=True)
+df = load_data('KNN_images/df_head.csv')
+df_accuracies = load_data('knn_results.csv')
 
 # title
 st.title('K Nearest Neighbors')
 st.header('Splitting data into training and test data')
 st.write('When we are first building a model we only have a set amount of data. Therefore, we need to save some of that data for testing. In our example we will withold 30\% of the data for testing.')
 
-st.write('Below you\'ll see the first five data points and their labels where zero through 2 represent Setosa, Versicolour, and Virginica respectively. You might wonder why we have a numerical label in addition to the name. That\'s because most models work better with numbers than words.')
-# read df.head from './pages/KNN_images/df_head.txt'
-st.write(df.head())
+if df is not None and df_accuracies is not None:
+    st.write('Below you\'ll see the first five data points and their labels where zero through 2 represent Setosa, Versicolour, and Virginica respectively. You might wonder why we have a numerical label in addition to the name. That\'s because most models work better with numbers than words.')
+    st.write(df.head())
 
-# Train a KNN model
-st.header('Let\'s train a KNN model!')
-## Take an input from the user for n
-n = st.slider('Select a value for n',1,105,1)
+    st.header('Let\'s train a KNN model!')
+    # Use the actual length of your results file to prevent index errors
+    max_n = len(df_accuracies)
+    n = st.slider('Select a value for n', 1, max_n, 1)
 
-st.write(str(float(df_accuracies.iloc[n-1]*100))[:5]+'% accuracy')
-st.image(f'./pages/KNN_images/knn_cm_{n}.png')
+    # Calculate accuracy
+    acc = float(df_accuracies.iloc[n-1].iloc[0]) * 100
+    st.write(f"**{acc:.2f}% accuracy**")
+
+    # Dynamic Image Loading
+    knn_img = KNN_IMG_DIR / f"knn_cm_{n}.png"
+    if knn_img.exists():
+        st.image(str(knn_img), caption=f'Figure 1: Confusion matrix (n={n})')
+    else:
+        st.error(f"Image for n={n} not found.")
+else:
+    st.error("Data files (CSVs) were not found. Please check your /pages folder.")
 st.write('Figure 1: Confusion matrix for KNN model with n='+str(n))
