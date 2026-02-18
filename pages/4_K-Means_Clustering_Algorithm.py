@@ -1,24 +1,8 @@
-# Importing the required libraries
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn import datasets
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.decomposition import PCA
-from sklearn.cluster import DBSCAN, KMeans
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import streamlit as st
-from matplotlib.lines import Line2D
+from pathlib import Path
 
-@st.cache_resource
-def load_format(file_path):
-    with open(file_path) as f:
-        return f.read()
-
-f = load_format('./pages/style.css')
-st.markdown(f'<style>{f}</style>',unsafe_allow_html=True)
+ROOT_DIR = Path(__file__).parent.parent
+KMEANS_DIR = ROOT_DIR / "pages" / "Kmeans_images"
 
 # Title for streamlit page
 st.title('K-Means Clustering Algorithm')
@@ -30,7 +14,12 @@ st.header('Creating the K-Means Model')
 st.write('Select a number of clusters to use for the K-Means model.')
 k = st.slider('Number of Clusters', min_value=1, max_value=7, value=3, step=1)
 
-st.image(f'./pages/Kmeans_images/kmeans_plot1_{k}.png')
-st.write('Figure 1: K-Means clustering with '+str(k)+' clusters - all features')
-st.image(f'./pages/Kmeans_images/kmeans_plot2_{k}.png')
-st.write('Figure 2: K-Means clustering with '+str(k)+' clusters - with PCA dimensionality reduction')
+# Load Plot 1
+p1 = KMEANS_DIR / f"kmeans_plot1_{k}.png"
+if p1.exists():
+    st.image(str(p1), caption=f'K-Means clustering with {k} clusters - all features')
+
+# Load Plot 2
+p2 = KMEANS_DIR / f"kmeans_plot2_{k}.png"
+if p2.exists():
+    st.image(str(p2), caption=f'K-Means clustering with {k} clusters - with PCA')
