@@ -4,9 +4,6 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent.parent
 IMAGE_PATH = ROOT_DIR / "pages" / "iris-machinelearning.png"
 
-f = load_format('./pages/style.css')
-st.markdown(f'<style>{f}</style>',unsafe_allow_html=True)
-
 st.title('Uh, so... What is this "Iris" Dataset?')
 if IMAGE_PATH.exists():
     st.image(str(IMAGE_PATH))
